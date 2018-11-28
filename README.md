@@ -14,7 +14,7 @@ $ sudo service impala-catalog start
 $ sudo service impala-server start
 
 ````
-####start-impalad.sh 
+#### start-impalad.sh 
 ````
 //启动参数
 IMPALAD_BINARY=service/impalad
@@ -33,7 +33,7 @@ add_executable(impalad
   daemon-main.cc
 )
 ````
-####daemon-main.cc
+#### daemon-main.cc
 ````
  if (daemon == "statestored") {
     return StatestoredMain(argc, argv);
@@ -50,14 +50,14 @@ add_executable(impalad
   }
 ````
 
-####impalad-main.cc
+#### impalad-main.cc
 ````
 //对应service文件夹下impala-server.h/cc
 impala_server->Start(FLAGS_be_port, FLAGS_beeswax_port(JDBC端口，HUE所用), FLAGS_hs2_port（(JDBC端口，其他)）);
 ````
 
-####impala-server
-#####Status ImpalaServer::Start 方法
+#### impala-server
+##### Status ImpalaServer::Start 方法
 
 必须要有角色**TODO**
 ````
