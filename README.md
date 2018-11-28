@@ -67,7 +67,7 @@ impala_server->Start(FLAGS_be_port, FLAGS_beeswax_port(JDBC端口，HUE所用), 
   }
 ````
 
-impala 启动过程主要包括三块，backend(be)，BEESWAX，HS2
+impala 启动过程主要包括三块，backend(be)，BEESWAX，HS2.
 角色不同，所需启动的服务也不同**TODO**
 ````
 //通信服务
