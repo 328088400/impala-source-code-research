@@ -186,9 +186,9 @@ public TExecRequest createExecRequest(TQueryCtx queryCtx, StringBuilder explainS
 
 Frontend.java -> createExecRequest //TODO StmtTableCache
 ````
-//分析statement类型,例如：Create, Drop, Insert等等
+//分析statement类型,例如：Create, Drop, Insert等等,稍后将以此为根据对sql进性分析
 StatementBase stmt = parse(queryCtx.client_request.stmt);
-//读取相应的tables的meta data
+//读取相应的tables的meta data，此数据将作为分信息数据被analyzer所使用
 StmtTableCache stmtTableCache = metadataLoader.loadTables(stmt);
 //开始分析query
 AnalysisResult analysisResult =
@@ -211,6 +211,24 @@ analysisResult_.analyzer_ = createAnalyzer(stmtTableCache);
 analysisResult_.stmt_.analyze(analysisResult_.analyzer_);
 ````
 
+以 SelectStmt 类型为例
+SelectStmt -> analyze(Analyzer analyzer)
+````
+// Start out with table refs to establish aliases.
+//分析SQL中所用到的table： 
+// 1.判断table 的种类,具体参照TableRef的子类，这里以BaseTableRef(HDFS/HDFS table)为例
+    fromClause_.analyze(analyzer);
+// 2.根据具体的table ref种类进行进一步的analyze,例如在BaseTableRef中有
+    analyzeTableSample(analyzer);
+     //验证TABLESAMPLE的有效性,不能大于100%或小于0%。 TABLESAMPLE的用法可参照Impala官方文档
+     
+    analyzeHints(analyzer);
+    //impala 里有各种hints可以来指定例如join的顺序，这次检测了hint的使用，例如只能对HDFS table加hint
+    //cross join不能使用shuffle等检测
+    
+    analyzeJoin(analyzer);
+    analyzeSkipHeaderLineCount();
+````
 
 
 
